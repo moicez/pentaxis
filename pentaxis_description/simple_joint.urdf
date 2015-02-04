@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<robot name="simple_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.5" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.25"/>
+      <material name="blue1">
+        <color rgba="0 0.2 1 1"/>
+      </material>
+    </visual>
+  </link>
+  
+  <link name="link1">
+    <visual>
+      <geometry>
+        <cylinder length="0.3" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.15"/>
+      <material name="blue2">
+        <color rgba="0 0.23 1 1"/>
+      </material>
+    </visual>
+  </link>
+  
+  <joint name="link1_to_link2" type="revolute">
+    <axis xyz="1 0 0"/>
+    <limit effort="1000.0" lower="-3.14159" upper="1.1" velocity="0.5"/>
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin rpy="0 0.0 0" xyz="0 0 0.5"/>
+  </joint>
+</robot>
+

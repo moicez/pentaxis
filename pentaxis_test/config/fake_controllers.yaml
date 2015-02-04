@@ -1,0 +1,10 @@
+controller_list:
+  - name: fake_arm_gp_controller
+    joints:
+      - base_link_to_link1
+      - link1_to_link2
+      - link2_to_link3
+      - link3_to_link4
+  - name: fake_eef_gp_controller
+    joints:
+      - eef2_to_eef_left

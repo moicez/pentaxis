@@ -1,0 +1,29 @@
+<package>
+  <name>moveit_controller_manager_pentaxis</name>
+  <version>0.5.5</version>
+  <description>An Pentaxis controller manager plugin for MoveIt.</description>
+  <author email="moicez@gmail.com">Moises Estrada</author>
+  <author email="mestrada@citedi.mx">Moises Estrada</author>
+  <maintainer email="moicez@gmail.com">Moises Estrada</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://moveit.ros.org</url>
+  <!-- <url type="bugtracker">https://github.com/ros-planning/moveit_plugins/issues</url>
+  <url type="repository">https://github.com/ros-planning/moveit_plugins</url> -->
+
+  <buildtool_depend>catkin</buildtool_depend> 
+
+  <build_depend>moveit_core</build_depend>
+  <build_depend>pluginlib</build_depend>
+  <build_depend>roscpp</build_depend>
+
+  <run_depend>moveit_core</run_depend>
+  <run_depend>pluginlib</run_depend>
+  <run_depend>roscpp</run_depend>
+
+  <export>
+    <moveit_core plugin="${prefix}/moveit_controller_manager_pentaxis_plugin_description.xml"/>
+  </export>
+
+</package>

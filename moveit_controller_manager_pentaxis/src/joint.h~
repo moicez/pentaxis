@@ -1,0 +1,112 @@
+/*********************************************************************
+ * Software License Agreement (BSD License)
+ *
+ *  Copyright (c) 2013, Moises Estrada Casta/neda
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above
+ *     copyright notice, this list of conditions and the following
+ *     disclaimer in the documentation and/or other materials provided
+ *     with the distribution.
+ *   * Neither the name of Moises Estrada Casta/neda nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *********************************************************************/
+
+/* Author: Moises Estrada */
+
+
+#include "std_msgs/String.h"
+#include <string>
+#include <sstream>
+
+
+class Joint {
+  private:
+	std::string pos_str, vel_str, acc_str; //values are in STEPS, STEPS/sec, STEPS/sec^2
+	float stpRad, stpRadReduced;
+  public:
+	float pos_old, pos_new; // Values are in radians
+	float velocity, acceleration; // Values are in rad/sec, rad/sec^2
+	float distance; // Total distance to travel (used to calculate Velocities and Acceleration
+	float distanceR;
+	float direction; // -1 or +1
+	bool special;
+	
+  public:
+	Joint() {
+		stpRad = 200000/(2*M_PI); // Ratio between STEPS and radians
+		stpRadReduced = 100000/(2*M_PI);  // Ratio between STEPS and radians
+		special = false;
+	}
+	void setPositions(float, float);
+	void setVelocity(float);
+	void setAcceleration(float);
+	float getDistance();
+	std::string posToString() {
+		return toString_pos(distance*direction);
+	}
+	std::string velToString() {
+		return toString(velocity);
+	}
+	std::string accToString() {
+		return toString(acceleration);
+	}
+  private:
+	std::string toString_pos(float value) {
+		std::ostringstream stream;
+		stream.str("");
+		if(special) {
+			//stream << round( (value - fabs(distDepentJoint))*stpRadReduced + fabs((distDepentJoint)*stpRad)); // Converts to STEPS
+			stream << round(distanceR*stpRadReduced); // Converts to STEPS
+		} else {
+			stream << round( value*stpRad ); // Converts to STEPS
+		}
+		return stream.str();
+	}
+	std::string toString(float value) {
+		std::ostringstream stream;
+		float val = value*stpRad;
+		stream.str("");
+		if(val < 1024) {
+			val = 1024;
+		}
+		stream << round( val ); // Converts to STEPS
+		return stream.str();
+	}
+
+};
+
+void Joint::setPositions(float p_old, float p_new) {
+	pos_old = p_old;
+	pos_new = p_new;
+	distance = fabs(pos_old - pos_new);
+	direction = -1*(pos_old - pos_new)/distance;
+}
+
+void Joint::setVelocity(float vel) {
+	velocity = vel;
+}
+
+void Joint::setAcceleration(float acc) {
+	acceleration = acc;
+}

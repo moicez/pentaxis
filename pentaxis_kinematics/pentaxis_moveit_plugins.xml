@@ -1,0 +1,9 @@
+<library path="lib/libpentaxis_moveit_arm_kinematics">
+	<class 	name="pentaxis_kinematics/PentaxisArmKinematicsPlugin" 
+			type="pentaxis_kinematics::PentaxisArmKinematicsPlugin"
+		    base_class_type="kinematics::KinematicsBase">
+		<description>
+			A custom implementation of kinematics for the Pentaxis Arm.
+		</description>
+	</class>
+</library>
